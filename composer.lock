@@ -4,8 +4,72 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ea40e77c07ea586d768c874d304b5c5",
+    "content-hash": "68c169f1ece694cf621e53553cbaba6e",
     "packages": [
+        {
+            "name": "base62/base62",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SiroDiaz/Base62.git",
+                "reference": "570a118a7a50014ad0a9ddcb0a60b1ca19ae3034"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SiroDiaz/Base62/zipball/570a118a7a50014ad0a9ddcb0a60b1ca19ae3034",
+                "reference": "570a118a7a50014ad0a9ddcb0a60b1ca19ae3034",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^3.5",
+                "phpunit/phpunit": "~6.0",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "suggest": {
+                "ext-gmp": "This extension enables faster big integer encoding and decoding."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Base62\\Base62ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Base62\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Siro Diaz Palazon",
+                    "email": "siro_diaz@yahoo.com"
+                }
+            ],
+            "description": "base62 encoder and decoder also for big numbers with Laravel integration",
+            "keywords": [
+                "BigInteger",
+                "base62",
+                "decoder",
+                "encoder",
+                "laravel",
+                "string",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/SiroDiaz/Base62/issues",
+                "source": "https://github.com/SiroDiaz/Base62"
+            },
+            "time": "2019-05-07T18:10:34+00:00"
+        },
         {
             "name": "composer/semver",
             "version": "3.4.0",
