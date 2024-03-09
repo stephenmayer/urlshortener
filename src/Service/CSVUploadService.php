@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
-use App\Entity\ShortLinks;
-use App\Repository\ShortLinksRepository;
+use App\Entity\Link;
+use App\Repository\LinkRepository;
 
 class CSVUploadService
 {
-    public function __construct(private ShortLinksRepository $shortLinksRepository)
+    public function __construct(private LinkRepository $shortLinksRepository)
     {
     }
 
@@ -29,7 +29,7 @@ class CSVUploadService
                 continue;
             }
 
-            $shortLink = new ShortLinks();
+            $shortLink = new Link();
             $shortLink->setUrl($link);
 
             $this->shortLinksRepository->save($shortLink);

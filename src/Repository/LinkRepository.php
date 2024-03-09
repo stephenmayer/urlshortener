@@ -2,46 +2,46 @@
 
 namespace App\Repository;
 
-use App\Entity\ShortLinks;
+use App\Entity\Link;
 use Base62\Base62;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<ShortLinks>
+ * @extends ServiceEntityRepository<Link>
  *
- * @method ShortLinks|null find($id, $lockMode = null, $lockVersion = null)
- * @method ShortLinks|null findOneBy(array $criteria, array $orderBy = null)
- * @method ShortLinks[]    findAll()
- * @method ShortLinks[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Link|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Link|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Link[]    findAll()
+ * @method Link[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ShortLinksRepository extends ServiceEntityRepository
+class LinkRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ShortLinks::class);
+        parent::__construct($registry, Link::class);
     }
 
-    public function save(ShortLinks $shortLink): void
+    public function save(Link $shortLink): void
     {
         $this->getEntityManager()->persist($shortLink);
         $this->getEntityManager()->flush();
     }
 
-    public function findByShortUrl($shortUrl): ?ShortLinks
+    public function findByShortUrl($shortUrl): ?Link
     {
         $base62 = new Base62();
-        $id = $base62->decode($shortUrl);
+        $id = $base62->decode($shortUrl) - 1000;
 
         return $this->find($id);
     }
 
-    public function findOneByUrl($url): ?ShortLinks
+    public function findOneByUrl($url): ?Link
     {
         return $this->findOneBy(['url' => $url]);
     }
 
-    public function incrementReadCount(ShortLinks $shortLink): void
+    public function incrementReadCount(Link $shortLink): void
     {
         $shortLink->setReadCount($shortLink->getReadCount() + 1);
         $this->save($shortLink);

@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ShortLinksRepository;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\LinkRepository;
 use Base62\Base62;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ShortLinksRepository::class)]
-class ShortLinks
+#[ApiResource]
+#[ORM\Entity(repositoryClass: LinkRepository::class)]
+class Link
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -80,6 +82,6 @@ class ShortLinks
     public function getShortUrl(): string
     {
         $base62 = new Base62();
-        return $_SERVER['HTTP_HOST'] . '/' . $base62->encode($this->id);
+        return $_SERVER['HTTP_HOST'] . '/' . $base62->encode($this->id + 1000);
     }
 }
