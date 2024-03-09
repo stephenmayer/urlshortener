@@ -6,8 +6,12 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\LinkRepository;
 use Base62\Base62;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']]
+)]
 #[ORM\Entity(repositoryClass: LinkRepository::class)]
 class Link
 {
@@ -17,12 +21,15 @@ class Link
     private ?int $id = null;
 
     #[ORM\Column(length: 4096)]
+    #[Groups(['read', 'write'])]
     private ?string $url = null;
 
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $readCount = null;
 
     public function __construct()
@@ -79,6 +86,7 @@ class Link
         return $this;
     }
 
+    #[Groups(['read'])]
     public function getShortUrl(): string
     {
         $base62 = new Base62();
