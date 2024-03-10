@@ -43,8 +43,13 @@ class LinkRepository extends ServiceEntityRepository
 
     public function incrementReadCount(Link $shortLink): void
     {
-        $shortLink->setReadCount($shortLink->getReadCount() + 1);
-        $this->save($shortLink);
+        $this->createQueryBuilder('s')
+            ->update(Link::class, 's')
+            ->set('s.readCount', 's.readCount + 1')
+            ->where('s.id = :id')
+            ->setParameter('id', $shortLink->getId())
+            ->getQuery()
+            ->execute();
     }
 
     //    /**

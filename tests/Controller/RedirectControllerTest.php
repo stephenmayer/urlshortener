@@ -4,11 +4,14 @@ namespace App\Tests\Controller;
 
 use App\Controller\RedirectController;
 use App\Entity\Link;
+use App\Message\RedirectMessage;
 use App\Repository\LinkRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * RedirectControllerTest contains test cases for the RedirectController class
@@ -41,9 +44,15 @@ class RedirectControllerTest extends TestCase
         $link->expects($this->once())->method('getUrl')->willReturn($url);
 
         $this->repository->expects($this->once())->method('findByShortUrl')->with($shortUrl)->willReturn($link);
-        $this->repository->expects($this->once())->method('incrementReadCount')->with($link);
 
-        $response = $this->redirectController->index($shortUrl);
+        $mockMessageBusInterface = $this->createMock(MessageBusInterface::class);
+        $mockMessageBusInterface->expects($this->once())->method('dispatch')->with(
+            $this->callback(
+                fn ($message) => $message instanceof RedirectMessage && $message->getShortUrl() === $shortUrl
+            )
+        )->willReturn(new Envelope(new RedirectMessage($shortUrl)));
+
+        $response = $this->redirectController->index($shortUrl, $mockMessageBusInterface);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals($url, $response->headers->get('Location'));
@@ -58,8 +67,9 @@ class RedirectControllerTest extends TestCase
         $shortUrl = 'non-existent';
 
         $this->repository->expects($this->once())->method('findByShortUrl')->with($shortUrl)->willReturn(null);
+        $mockMessageBusInterface = $this->createMock(MessageBusInterface::class);
 
-        $response = $this->redirectController->index($shortUrl);
+        $response = $this->redirectController->index($shortUrl, $mockMessageBusInterface);
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(404, $response->getStatusCode());

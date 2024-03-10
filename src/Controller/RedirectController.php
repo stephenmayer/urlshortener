@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Message\RedirectMessage;
 use App\Repository\LinkRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class RedirectController extends AbstractController
@@ -14,10 +16,12 @@ class RedirectController extends AbstractController
     }
 
     #[Route('/{shortUrl}', name: 'app_redirect')]
-    public function index($shortUrl): Response
+    public function index(string $shortUrl, MessageBusInterface $bus): Response
     {
         if ($shortLink = $this->shortLinksRepository->findByShortUrl($shortUrl)) {
-            $this->shortLinksRepository->incrementReadCount($shortLink);
+            // async dispatch a message to update the read (click) count
+            $message = new RedirectMessage($shortUrl);
+            $bus->dispatch($message);
 
             return $this->redirect($shortLink->getUrl());
         }
