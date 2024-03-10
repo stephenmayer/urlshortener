@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ImportCsvController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em; max-width: 1000px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Upload Link CSV - Analytics</h1>
+    <a href="/">Import</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Link</th>
+                <th>ShortLink</th>
+                <th>Clicks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for link in links %}
+                <tr>
+                    <td><a href="{{ link.getUrl() }}">{{ link.getUrl() }}</a></td>
+                    <td><a href="http://{{ link.getShortUrl() }}">http://{{ link.getShortUrl() }}</a></td>
+                    <td>{{ link.getReadCount() }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
