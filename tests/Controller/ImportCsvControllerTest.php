@@ -26,7 +26,7 @@ class ImportCsvControllerTest extends WebTestCase
         $this->createMockUploadedCsvFile();
         
         $client->request('POST', '/import', [], ['csv' => self::$file]);
-
+        $this->assertResponseIsSuccessful();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 

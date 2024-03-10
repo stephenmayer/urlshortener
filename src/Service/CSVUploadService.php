@@ -13,9 +13,10 @@ class CSVUploadService
 
     public function getLinksFromUploadFile(string $file): array
     {
-        $links = str_getcsv(file_get_contents($file), "\n");
-
-        return $links;
+        if (file_exists($file) === false) {
+            throw new \Exception('File does not exist');
+        }
+        return str_getcsv(file_get_contents($file), "\n");
     }
 
     public function processLinks(array $links): array
